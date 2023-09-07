@@ -1,0 +1,2 @@
+<button class="list-group-item {% if categorie.pk == glob.pk %}active{% endif %} text-start z-0" hx-get = "get-materiel/{{ categorie.pk }}/" hx-target = "#materiels" hx-trigger = "click"
+    onclick = "getCategoriePk({{ categorie.pk }})" hx-push-url="false" hx-swap = "innerHtml" data-bs-toggle="pill">{{ categorie.nom }}</button>

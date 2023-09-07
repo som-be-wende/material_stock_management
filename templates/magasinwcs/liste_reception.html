@@ -1,0 +1,46 @@
+<table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Id</th>
+            <th scope="col">Materiel</th>
+            <th scope="col">Quantite</th>
+            <th scope="col">Fournisseur</th>
+            <th scope="col">ANNULER</th>
+            <th scope="col">SUPPRIMER</th>
+        </tr>
+    </thead>
+    <tbody id="reception">
+        {% for reception in receptions %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ reception.date }}</td>
+                    <td>{{ reception.id }}</td>
+                    <td>{{ reception.materiel.id}}&nbsp;{{ reception.materiel.nom }}</td>
+                    <td>{{ reception.quantite }}</td>
+                    <td>{{ reception.fournisseur.nom }}</td>
+                    <td>
+                        <form action="{% url 'delete-reception' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="materiel_pk" value="{{ reception.materiel.pk }}">
+                            <input type="hidden" value="{{ reception.pk }}" name="reception_pk">
+                            <input type="hidden" value="{{ reception.quantite }}" name="quantite">
+                            <button hx-post="{% url 'delete-reception' %}" hx-target = "closest tr"
+                                    hx-trigger = "click" hx-swap = "outerHtml" hx-push-url="false"
+                                    hx-confirm="Voulez-vous annulez la reception?" class="btn btn-primary">X</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'delete-reception' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ reception.pk }}" name="reception_pk">
+                            <button hx-post="{% url 'delete-reception' %}" hx-target = "closest tr"
+                                    hx-trigger = "click" hx-swap = "outerHtml" hx-push-url="false"
+                                    hx-confirm="Supprimer l'élément?" class="btn btn-danger">-</button>
+                        </form>
+                    </td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>

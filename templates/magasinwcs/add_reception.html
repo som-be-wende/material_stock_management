@@ -1,0 +1,34 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}add_reception{% endblock %}
+
+{% block content %}
+<h1 id="entete">RECEPTION</h1>
+
+    <form id="update_form" class="d-flex flex-column " action="{% url 'add-reception' %}" method="POST">
+        {% csrf_token %}
+            <label class="form-label" for="materiel">MATERIEL:
+                <input class="form-control mb-2" type="hidden" value="{{ materiel.id }}" name="materiel_pk">
+                <input class="form-control mb-2" type="text" id="materiel" value="{{ materiel.id }}" name="materiel_pk" disabled>
+            </label>
+            <label class="form-label" for="date">DATE:
+                <input class="form-control mb-2" type="date" id="date" name="date" required>
+            </label>
+
+            <label class="form-label" for="quantite">QUANTITE:
+                <input class="form-control mb-2" type="number" min="0" id="quantite" name="quantite" required>
+            </label>
+
+            <label class="form-label" for="fournisseur">FOURNISSEUR:
+                <select class="form-select mb-2" name="fournisseur" id="fournisseur" >
+                    <option value="-1">-------</option>
+                    {% for fournisseur in fournisseurs %}
+                        <option value="{{ fournisseur.pk }}">{{ fournisseur.nom }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        <button class="btn btn-success mt-4" type="submit">Enregistrer</button>
+
+    </form>
+
+{% endblock %}

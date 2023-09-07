@@ -1,0 +1,104 @@
+{% if not materielplus %}
+<table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Description</th>
+            <th scope="col">Quantite</th>
+            <th scope="col">Categorie</th>
+            <th class="choix" scope="col">Receptionner</th>
+            <th class="choix" scope="col">Commander</th>
+            <th class="choix" scope="col">Utilisation</th>
+            <th class="choix" scope="col">Modifier</th>
+            <th class="choix" scope="col">Supprimer</th>
+        </tr>
+    </thead>
+    <tbody id="materielplus">
+        {% for materiel in materiels %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ materiel.id }}</td>
+                    <td>{{ materiel.nom }}</td>
+                    <td>{{ materiel.description }}</td>
+                    <td>{{ materiel.quantite }}</td>
+                    <td >{{ materiel.categorie.nom }}</td>
+                    <td class="choix">
+                        <form action="{% url 'add-reception' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ materiel.pk }}" name="materiel_pk">
+                            <button class="btn btn-success">+</button>
+                        </form>
+                    </td>
+                    <td class="choix">
+                        <form action="{% url 'add-commande' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ materiel.pk }}" name="materiel_pk">
+                            <button class="btn btn-primary">!</button>
+                        </form>
+                    </td>
+                    <td class="choix">
+                        <form action="{% url 'add-utilisation' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ materiel.pk }}" name="materiel_pk">
+                            <button class="btn btn-secondary">#</button>
+                        </form>
+                    </td>
+                    <td class="choix">
+                        <form action="{% url 'materiel_update' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ materiel.pk }}" name="materiel_pk">
+                            <button class="btn btn-dark">/</button>
+                        </form>
+                    </td>
+                    <td><button class="btn btn-danger" hx-get = "delete-materiel/{{ materiel.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+                            hx-swap = "outerHtml" hx-push-url="false" hx-confirm="Supprimer l'élément?">-</button></td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endif %}
+
+{% if materielplus %}
+        <tr>
+            <td>{{ materielplus.id }}</td>
+            <td>{{ materielplus.nom }}</td>
+            <td>{{ materielplus.description }}</td>
+            <td>{{ materielplus.quantite }}</td>
+            <td>{{ materielplus.categorie.nom }}</td>
+            <td class="choix">
+                        <form action="{% url 'add-reception' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ materiel.pk }}" name="materiel_pk">
+                            <button class="btn btn-success">+</button>
+                        </form>
+                    </td>
+            <td class="choix">
+                <form action="{% url 'add-commande' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ materielplus.pk }}" name="materiel_pk">
+                    <button class="btn btn-primary">!</button>
+                </form>
+            </td>
+            <td class="choix">
+                <form action="{% url 'add-utilisation' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ materielplus.pk }}" name="materiel_pk">
+                    <button class="btn btn-secondary">#</button>
+                </form>
+            </td>
+            <td class="choix">
+                <form action="{% url 'materiel_update' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ materielplus.pk }}" name="materiel_pk">
+                    <button class="btn btn-dark">/</button>
+                </form>
+            </td>
+            <td><button class="btn btn-danger" hx-get = "delete-materiel/{{ materielplus.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+                       hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+         </tr>
+{% endif %}
+
+
+

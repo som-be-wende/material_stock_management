@@ -1,0 +1,35 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_reception{% endblock %}
+
+{% block content %}
+      <h1 id="entete">RECEPTIONS</h1>
+
+    <form class="d-flex flex-row justify-content-start mb-4" >
+        <p class="">Afficher par:</p>
+        {% csrf_token %}
+        <label class="form-label ms-4" for="materielchoix">Materiel &nbsp;
+            <select id="materielchoix" class="form-select" name="materiel" hx-post="{% url 'get-reception' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#receptions">
+                <option value="g" selected>Tous</option>
+                {% for materiel in materiels %}
+                    <option value="{{ materiel.pk }}">{{ materiel.id }}&nbsp;{{ materiel.nom }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label class="form-label ms-4" for="fournisseurchoix">fournisseur &nbsp;
+            <select id="fournisseurchoix" class="form-select" name="fournisseur" hx-post="{% url 'get-reception' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#receptions">
+                <option value="g" selected>Tous</option>
+                {% for fournisseur in fournisseurs %}
+                    <option value="{{ fournisseur.pk }}">{{ fournisseur.nom }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </form>
+
+    <div id="receptions">
+        {% include 'magasinwcs/liste_reception.html' with receptions=receptions %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+<table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Id</th>
+            <th scope="col">Materiel</th>
+            <th scope="col">Quantite</th>
+            <th scope="col">Fournisseur</th>
+            <th scope="col">Traitement</th>
+            <th scope="col">SUPPRIMER</th>
+        </tr>
+    </thead>
+    <tbody id="commande">
+        {% for commande in commandes %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ commande.date }}</td>
+                    <td>{{ commande.id}}&nbsp;{{ commande.id }}</td>
+                    <td>{{ commande.materiel.id }}&nbsp;{{ commande.materiel.nom }}</td>
+                    <td>
+                        <form>
+                            {% csrf_token %}
+                            <input type="hidden" name="commande_pk" value="{{ commande.pk }}" >
+                            <label>
+                                <input hx-post="{% url 'quantite-change' %}" hx-trigger="change" hx-swap="none"
+                                       type="number" value="{{ commande.quantite }}" name="quantite">
+                            </label>
+                        </form>
+                    </td>
+                    <td>{{ commande.fournisseur.nom }}</td>
+                    <td >
+                        <form >
+                            {% csrf_token %}
+                            <input type="hidden" name="commande_pk" value="{{ commande.pk }}" >
+                            <label>
+                                <select class="form-select" name="traitement" hx-post="{% url 'traitement-change' %}" hx-trigger="change" hx-swap="none">
+                                    <option value="t"  {% if commande.traitement == 't' %}selected{% endif %}>Traité</option>
+                                    <option value="n" {% if commande.traitement == 'n' %}selected{% endif %}>Non-traité</option>
+                                </select>
+                            </label>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'delete-commande' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ commande.pk }}" name="commande_pk">
+                            <button hx-post="{% url 'delete-commande' %}" hx-target = "closest tr"
+                                    hx-trigger = "click" hx-swap = "outerHtml" hx-push-url="false"
+                                    hx-confirm="Supprimer l'élément?" class="btn btn-danger">-</button>
+                        </form>
+                    </td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>

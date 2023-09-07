@@ -1,0 +1,70 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_materiel{% endblock %}
+
+{% block content %}
+
+    <h1 id="entete">MATERIEL</h1>
+
+    <!-- Categorie -->
+
+    <div class="row mb-5">
+        <div class="col-4">
+            <div id="categories" class="list-group flex-column">
+                <p class="sous-titre">CATEGORIES:</p>
+                {% for categorie in categories %}
+                    {% include "magasinwcs/categorie.html" with categorie=categorie %}
+                {% endfor %}
+            </div>
+
+
+            <form method="POST" action="add-categorie/" class="d-flex gap-3 mt-3 mb-3">
+                {% csrf_token %}
+                <label>
+                    <input type="text"  class="form-control" name="categorie-nom" placeholder="Categorie..." required="required">
+                </label>
+                <button type="submit" hx-post = "add-categorie/" HX-Refresh = "true" class="btn btn-success" hx-push-url="false"
+                        hx-target = "#categories" hx-trigger = "click" hx-swap = "beforeend">Ajouter</button>
+            </form>
+        </div>
+
+
+
+        <!-- Materiel -->
+
+        <div class="col ms-5 ps-5 border-start">
+            <p class="sous-titre text-center ">Ajouter du materiel</p>
+            <form method="POST" class="d-flex flex-column text-end ">
+                {% csrf_token %}
+                 <label>
+                    <input type="text" class="form-control mt-3" name="materiel-id" placeholder="Id...">
+                </label>
+                <label>
+                    <input type="text" class="form-control mt-3" name="materiel-nom" placeholder="Nom...">
+                </label>
+                 <label>
+                     <textarea class="form-control mt-3" name="materiel-description" placeholder="Description..."></textarea>
+                </label>
+                    <input type="hidden" id="add_m" name="categorie_pk" value="{{ glob.pk }}">
+
+                <button type="submit" hx-post = "add-materiel/" class="btn btn-success mt-3 " hx-push-url="false"
+                        hx-target = "#materielplus" hx-trigger = "click" hx-swap = "afterbegin">Ajouter</button>
+
+            </form>
+        </div>
+    </div>
+
+
+    <p>Liste du materiel:</p>
+    <div id="materiels">
+          {% include "magasinwcs/liste_materiel.html" with materiels=materiels %}
+    </div>
+
+
+    <form onsubmit="confirm('Supprimer la catégorie?')" action="delete-categorie/" method="POST">
+    {% csrf_token %}
+    <input type="hidden" id="del_cat" name="categorie_pk" value="{{ glob.pk }}">
+        <button  class="btn btn-danger mt-3" >Supprimer-Catégorie</button>
+    </form>
+
+{% endblock %}

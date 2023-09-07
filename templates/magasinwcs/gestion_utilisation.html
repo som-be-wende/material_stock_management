@@ -1,0 +1,42 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_utilisation{% endblock %}
+
+{% block content %}
+      <h1 id="entete">UTILISATIONS</h1>
+
+    <form class="d-flex flex-row justify-content-start mb-4" >
+        <p class="">Afficher par:</p>
+        {% csrf_token %}
+        <label class="form-label ms-5"  for="typechoix">Type &nbsp;
+            <select id="typechoix" class="form-select" name="type" hx-post="{% url 'get-utilisation' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#utilisations">
+                <option value="g" selected>Tous</option>
+                <option value="e" selected>Emprunt</option>
+                <option value="u">Consommation</option>
+            </select>
+        </label>
+        <label class="form-label ms-4"  for="statutchoix">Statut &nbsp;
+            <select id="statutchoix" class="form-select" name="statut" hx-post="{% url 'get-utilisation' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#utilisations">
+                <option value="g" >Tous</option>
+                <option value="r">Remis</option>
+                <option value="n" selected>Non-remis</option>
+            </select>
+        </label>
+        <label class="form-label ms-4" for="employechoix">Utilisateur &nbsp;
+            <select id="employechoix" class="form-select" name="employe" hx-post="{% url 'get-utilisation' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#utilisations">
+                <option value="g" selected>Tous</option>
+                {% for employe in employes %}
+                    <option value="{{ employe.pk }}">{{ employe.nom }}&nbsp;{{ employe.prenom }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </form>
+
+    <div id="utilisations">
+        {% include 'magasinwcs/liste_utilisation.html' with utilisations=utilisations %}
+    </div>
+
+{% endblock %}

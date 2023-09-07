@@ -1,0 +1,36 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}materiel_update{% endblock %}
+
+{% block content %}
+
+    <h1 id="entete">MODIFICATION DU MATERIEL</h1>
+        <form id="update_form" class="d-flex flex-column " method="GET" action="{% url 'materiel_update' %}">
+            <label>
+                <input type="hidden" value="{{ materiel.pk }}" name="materiel_pk">
+            </label>
+            <label class="form-label" for="id">ID:
+                <input class="form-control mb-2" type="text" id="id" value="{{ materiel.pk }}" name="id" disabled>
+            </label>
+
+            <label class="form-label" for="nom">NOM:
+                <input class="form-control mb-2" type="text" id="nom" value="{{ materiel.nom }}" name="nom">
+            </label>
+
+            <label class="form-label" for="description">DESCRIPTION:
+                <input class="form-control mb-2" type="text" id="description" value="{{ materiel.description }}" name="description">
+            </label>
+
+            <label class="form-label" for="categorie">CATEGORIE:
+                <select class="form-select mb-2" name="categorie" id="categorie">
+                    {% for categorie in categories %}
+                        <option value="{{ categorie.pk }}"
+                                {% if categorie.pk == materiel.categorie.pk %}selected="selected"{% endif %}>{{ categorie.nom }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+                <button class="btn btn-success" type="submit">Modifier</button>
+
+        </form>
+{% endblock %}

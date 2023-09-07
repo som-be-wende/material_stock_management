@@ -1,0 +1,56 @@
+{% if not employeplus %}
+<table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">NOM</th>
+            <th scope="col">PRENOM</th>
+            <th scope="col">FONCTION</th>
+            <th scope="col">MODIFIER</th>
+            <th scope="col">SUPPRIMER</th>
+        </tr>
+    </thead>
+    <tbody id="employeplus">
+        {% for employe in employes %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ employe.id }}</td>
+                    <td>{{ employe.nom }}</td>
+                    <td>{{ employe.prenom }}</td>
+                    <td>{{ employe.fonction.nom }}</td>
+                    <td>
+                        <form action="{% url 'employe_update' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ employe.pk }}" name="employe_pk">
+                            <button class="btn btn-dark">/</button>
+                        </form>
+                    </td>
+                    <td><button class="btn btn-danger" hx-get = "/delete-employe/{{ employe.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+                           hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endif %}
+
+{% if employeplus %}
+        <tr>
+            <td>{{ employeplus.id }}</td>
+            <td>{{ employeplus.nom }}</td>
+            <td>{{ employeplus.prenom }}</td>
+            <td>{{ employeplus.fonction.nom }}</td>
+            <td>
+                <form action="{% url 'employe_update' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ employeplus.pk }}" name="employe_pk">
+                    <button class="btn btn-dark">/</button>
+                </form>
+            </td>
+            <td><button class="btn btn-danger" hx-get = "/delete-employe/{{ employeplus.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+                        hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+         </tr>
+{% endif %}
+
+
+

@@ -1,0 +1,23 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_client{% endblock %}
+
+{% block content %}
+    <h1 id="entete">CLIENTS</h1>
+    <form class="d-flex flex-row justify-content-center mb-5" action="{% url 'add-client' %}" method="POST">
+    <fieldset >Ajouter un client:</fieldset>
+        {% csrf_token %}
+        <label class="mx-4">
+            <input class="form-control mx-4" type="text" name="nom" placeholder="Nom...">
+        </label>
+        <label class="mx-4">
+            <input type="text" class="form-control" name="contact" placeholder="Conctact...">
+        </label>
+        <button hx-post="{% url 'add-client' %}"  hx-push-url="false" hx-target="#clientplus" hx-swap="afterbegin" class="btn btn-success" type="submit">Ajouter</button>
+    </form>
+
+    <p>Liste des clients:</p>
+    <div id="clients">
+        {% include 'magasinwcs/liste_client.html' with clients=clients %}
+    </div>
+{% endblock %}

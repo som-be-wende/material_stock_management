@@ -1,0 +1,50 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}add_utilisation{% endblock %}
+
+{% block content %}
+<h1 id="entete">UTILISATION</h1>
+
+    <form id="update_form" class="d-flex flex-column " action="{% url 'add-utilisation' %}" method="POST">
+        {% csrf_token %}
+            <label class="form-label" for="materiel">MATERIEL:
+                <input class="form-control mb-2" type="hidden" value="{{ materiel.id }}" name="materiel_pk">
+                <input class="form-control mb-2" type="text" id="materiel" value="{{ materiel.id }}" name="materiel_pk" disabled>
+            </label>
+            <label class="form-label" for="date">DATE:
+                <input class="form-control mb-2" type="date" id="date" name="date" required>
+            </label>
+
+            <label class="form-label" for="quantite">QUANTITE:
+                <input class="form-control mb-2" type="number" min="0" id="quantite" name="quantite" required>
+            </label>
+
+            <label class="form-label" for="utilisateur">UTILISATEUR:
+                <select class="form-select mb-2" name="utilisateur" id="utilisateur"  required>
+                    <option value="">--choisir un élément--</option>
+                    {% for employe in employes %}
+                        <option value="{{ employe.pk }}">{{ employe.nom }} {{ employe.prenom }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label class="form-label" for="client">CLIENT:
+                <select class="form-select mb-2" name="client" id="client" >
+                    <option value="-1">-------</option>
+                    {% for client in clients %}
+                        <option value="{{ client.pk }}">{{ client.nom }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label class="form-label" for="utilisateur">EMPRUNT/CONSOMMATION:&nbsp&nbsp&nbsp&nbsp
+                <input type="radio" value="e" name="type" checked>&nbsp;Emprunt
+                <input class="ms-3" type="radio" value="u" name="type">&nbsp;Consommation
+            </label>
+
+
+        <button class="btn btn-success mt-4" type="submit">Enregistrer</button>
+
+    </form>
+
+{% endblock %}

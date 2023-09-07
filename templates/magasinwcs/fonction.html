@@ -1,0 +1,3 @@
+<button class="list-group-item {% if fonction.pk == glob.pk %}active{% endif %} text-start z-0"
+        hx-get = "/get-employe/{{ fonction.pk }}/"  hx-push-url="false" hx-target = "#employes" hx-trigger = "click"
+    onclick = "getFonctionPk({{ fonction.pk }})" hx-swap = "innerHtml" data-bs-toggle="pill">{{ fonction.nom }}</button>

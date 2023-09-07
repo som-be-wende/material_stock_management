@@ -1,0 +1,50 @@
+{% if not clientplus %}
+    <table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">NOM</th>
+            <th scope="col">CONTACT</th>
+            <th scope="col">MODIFIER</th>
+            <th scope="col">SUPPRIMER</th>
+        </tr>
+    </thead>
+    <tbody id="clientplus">
+        {% for client in clients %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.nom }}</td>
+                    <td>{{ client.contact }}</td>
+                    <td>
+                        <form action="{% url 'client_update' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ client.pk }}" name="client_pk">
+                            <button class="btn btn-dark">/</button>
+                        </form>
+                    </td>
+                    <td><button class="btn btn-danger" hx-get = "/delete-client/{{ client.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+                           hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endif %}
+
+{% if clientplus %}
+     <tr>
+        <td>{{ clientplus.id }}</td>
+        <td>{{ clientplus.nom }}</td>
+        <td>{{ clientplus.contact }}</td>
+        <td>
+            <form action="{% url 'client_update' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" value="{{ clientplus.pk }}" name="client_pk">
+                <button class="btn btn-dark">/</button>
+            </form>
+        </td>
+        <td><button class="btn btn-danger" hx-get = "/delete-client/{{ clientplus.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+               hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+     </tr>
+{% endif %}

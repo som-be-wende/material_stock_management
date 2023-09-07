@@ -1,0 +1,44 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_administrateur{% endblock %}
+
+{% block content %}
+    <h1 id="entete">Administrateurs</h1>
+    <form class="d-flex flex-row mb-5" action="{% url 'add-administrateur' %}" method="POST" >
+    <fieldset >Ajouter un administrateur:</fieldset>
+        {% csrf_token %}
+        <input type="hidden" value="{{ user.id }}" name="user">
+        <label>
+            <select class="form-select" name="employe_pk" required {% if admin.type == 'n' %}disabled{% endif %}>
+                <option value="-1">--choix d'une personne--</option>
+                {% for employe in employes %}
+                    <option value="{{ employe.pk }}">{{ employe.id }}&nbsp;&nbsp;
+                        {{ employe.nom }}&nbsp;{{ employe.prenom }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label for="email" class="">
+            <input type="email" class="form-control" name="email" id="email" placeholder="E-mail" required>
+        </label>
+        <label for="password" class="">
+        <input class="form-control" type="password" id="password" name="password" placeholder="Mot de passe" required>
+        <input class="form-check-input" type="checkbox" onclick="myFunction()">show password
+        </label>
+
+        <label class="">
+            <select class="form-select" name="type" {% if admin.type == 'n' %}disabled{% endif %}>
+                <option value="n" selected>Normal</option>
+                <option value="s">Super-admin</option>
+            </select>
+        </label>
+        <label>
+        <button {% if admin.type == 'n' %}disabled{% endif %} hx-swap="beforeend" class="btn btn-success ms-3" type="submit">Ajouter</button>
+        </label>
+    </form>
+
+    <p>Liste des administrateurs:</p>
+    <div id="administrateurs">
+        {% include 'magasinwcs/liste_administrateur.html' with administrateurs=administrateurs %}
+    </div>
+{% endblock %}

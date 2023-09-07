@@ -1,0 +1,43 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_commande{% endblock %}
+
+{% block content %}
+      <h1 id="entete">COMMANDES</h1>
+
+    <form class="d-flex flex-row justify-content-start mb-4" >
+        <p class="">Afficher par:</p>
+        {% csrf_token %}
+        <label class="form-label ms-5"  for="traitementchoix">Traitement &nbsp;
+            <select id="traitementchoix" class="form-select" name="traitement" hx-post="{% url 'get-commande' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#commandes">
+                <option value="g" selected>Tous</option>
+                <option value="n" selected>Non-traité</option>
+                <option value="t">Traité</option>
+            </select>
+        </label>
+        <label class="form-label ms-4" for="materielchoix">Materiel &nbsp;
+            <select id="materielchoix" class="form-select" name="materiel" hx-post="{% url 'get-commande' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#commandes">
+                <option value="g" selected>Tous</option>
+                {% for materiel in materiels %}
+                    <option value="{{ materiel.pk }}">{{ materiel.id }}&nbsp;{{ materiel.nom }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label class="form-label ms-4" for="fournisseurchoix">fournisseur &nbsp;
+            <select id="fournisseurchoix" class="form-select" name="fournisseur" hx-post="{% url 'get-commande' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#commandes">
+                <option value="g" selected>Tous</option>
+                {% for fournisseur in fournisseurs %}
+                    <option value="{{ fournisseur.pk }}">{{ fournisseur.nom }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </form>
+
+    <div id="commandes">
+        {% include 'magasinwcs/liste_commande.html' with commandes=commandes %}
+    </div>
+
+{% endblock %}

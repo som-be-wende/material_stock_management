@@ -1,0 +1,67 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_materiel{% endblock %}
+
+{% block content %}
+
+    <h1 id="entete">PERSONNEL</h1>
+
+    <!-- Fonction -->
+
+    <div class="row mb-5">
+        <div class="col-4">
+            <div id="fonctions" class="list-group flex-column">
+                <p class="sous-titre">FONCTIONS:</p>
+                {% for fonction in fonctions %}
+                    {% include "magasinwcs/fonction.html" with fonction=fonction %}
+                {% endfor %}
+            </div>
+
+
+            <form method="POST" action="{% url 'add-fonction' %}" class="d-flex gap-3 mt-3 mb-3">
+                {% csrf_token %}
+                <label>
+                    <input type="text"  class="form-control" name="fonction-nom" placeholder="Fonction..." required="required">
+                </label>
+                <button type="submit" hx-post = "{% url 'add-fonction' %}" hx-push-url="false" HX-Refresh = "true" class="btn btn-success"
+                        hx-target = "#fonctions" hx-trigger = "click" hx-swap = "beforeend">Ajouter</button>
+            </form>
+        </div>
+
+
+
+        <!-- Employe -->
+
+        <div class="col ms-5 ps-5 border-start">
+            <p class="sous-titre text-center ">Ajouter du personnel</p>
+            <form method="POST" class="d-flex flex-column text-end ">
+                {% csrf_token %}
+                <label>
+                    <input type="text" class="form-control mt-3" name="employe-nom" placeholder="Nom...">
+                </label>
+                 <label>
+                     <input class="form-control mt-3" name="employe-prenom" placeholder="Prenom...">
+                </label>
+                    <input type="hidden" id="add_e" name="fonction_pk" value="{{ glob.pk }}">
+
+                <button type="submit" hx-post = "{% url 'add-employe' %}" class="btn btn-success mt-3 " hx-push-url="false"
+                        hx-target = "#employeplus" hx-trigger = "click" hx-swap = "afterbegin">Ajouter</button>
+
+            </form>
+        </div>
+    </div>
+
+
+    <p>Liste du personnel:</p>
+    <div id="employes">
+          {% include "magasinwcs/liste_employe.html" with employes=employes %}
+    </div>
+
+
+    <form onsubmit="confirm('Supprimer la fonction?')" action="{% url 'delete-fonction' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" id="del_fonc" name="fonction_pk" value="{{ glob.pk }}">
+        <button  class="btn btn-danger mt-3" >Supprimer-Fonction</button>
+    </form>
+
+{% endblock %}

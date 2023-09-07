@@ -1,0 +1,44 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}employe_update{% endblock %}
+
+{% block content %}
+
+    <h1 id="entete">MODIFICATION DU PERSONNEL</h1>
+        <form id="update_form" class="d-flex flex-column " method="GET" action="{% url 'employe_update' %}">
+            <label>
+                <input type="hidden" value="{{ employe.pk }}" name="employe_pk">
+            </label>
+            <label class="form-label" for="nom">NOM:
+                <input class="form-control mb-2" type="text" id="nom" value="{{ employe.nom }}" name="nom">
+            </label>
+
+            <label class="form-label" for="prenom">PRENOM:
+                <input class="form-control mb-2" type="text" id="prenom" value="{{ employe.prenom }}" name="prenom">
+            </label>
+
+            <label class="form-label" for="fonction">FONCTION:
+                <select class="form-select mb-2" name="fonction" id="fonction">
+                    {% for fonction in fonctions %}
+                        <option value="{{ fonction.pk }}"
+                                {% if fonction.pk == employe.fonction.pk %}selected="selected"{% endif %}>{{ fonction.nom }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            {% if user.id == employe.id %}
+                 <label class="form-label" for="email">E-MAIL:
+                    <input class="form-control mb-2" type="text" id="email" value="{{ employe.email }}" name="email">
+                </label>
+
+                <label class="form-label" for="password">Mot de passe:
+                    <input class="form-control mb-2" type="password" id="password" value="{{ employe.password }}" name="password">
+                    <input class="form-check-input" type="checkbox" onclick="myFunction()">montrer le mot de passe
+                </label>
+
+            {% endif %}
+
+                <button class="btn btn-success" type="submit">Modifier</button>
+
+        </form>
+{% endblock %}

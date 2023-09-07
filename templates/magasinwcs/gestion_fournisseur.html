@@ -1,0 +1,23 @@
+{% extends "magasinwcs/base.html"%}
+
+{% block bodyid %}gestion_fournisseur{% endblock %}
+
+{% block content %}
+    <h1 id="entete">FOURNISSEURS</h1>
+    <form class="d-flex flex-row justify-content-center mb-5" action="{% url 'add-fournisseur' %}" method="POST">
+    <fieldset >Ajouter un fournisseur:</fieldset>
+        {% csrf_token %}
+        <label class="mx-4">
+            <input class="form-control mx-4" type="text" name="nom" placeholder="Nom...">
+        </label>
+        <label class="mx-4">
+            <input type="text" class="form-control" name="contact" placeholder="Conctact...">
+        </label>
+        <button hx-post="{% url 'add-fournisseur' %}"  hx-push-url="false" hx-target="#fournisseurplus" hx-swap="afterbegin" class="btn btn-success" type="submit">Ajouter</button>
+    </form>
+
+    <p>Liste des fournisseurs:</p>
+    <div id="fournisseurs">
+        {% include 'magasinwcs/liste_fournisseur.html' with fournisseurs=fournisseurs %}
+    </div>
+{% endblock %}

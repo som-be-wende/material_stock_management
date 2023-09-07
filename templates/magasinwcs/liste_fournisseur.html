@@ -1,0 +1,50 @@
+{% if not fournisseurplus %}
+    <table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">NOM</th>
+            <th scope="col">CONTACT</th>
+            <th scope="col">MODIFIER</th>
+            <th scope="col">SUPPRIMER</th>
+        </tr>
+    </thead>
+    <tbody id="fournisseurplus">
+        {% for fournisseur in fournisseurs %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ fournisseur.id }}</td>
+                    <td>{{ fournisseur.nom }}</td>
+                    <td>{{ fournisseur.contact }}</td>
+                    <td>
+                        <form action="{% url 'fournisseur_update' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ fournisseur.pk }}" name="fournisseur_pk">
+                            <button class="btn btn-dark">/</button>
+                        </form>
+                    </td>
+                    <td><button class="btn btn-danger" hx-get = "/delete-fournisseur/{{ fournisseur.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+                           hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>
+{% endif %}
+
+{% if fournisseurplus %}
+     <tr>
+        <td>{{ fournisseurplus.id }}</td>
+        <td>{{ fournisseurplus.nom }}</td>
+        <td>{{ fournisseurplus.contact }}</td>
+        <td>
+            <form action="{% url 'fournisseur_update' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" value="{{ fournisseurplus.pk }}" name="fournisseur_pk">
+                <button class="btn btn-dark">/</button>
+            </form>
+        </td>
+        <td><button class="btn btn-danger" hx-get = "/delete-fournisseur/{{ fournisseurplus.pk }}/" hx-target = "closest tr" hx-trigger = "click"
+               hx-push-url="false" hx-swap = "outerHtml" hx-confirm="Supprimer l'élément?">-</button></td>
+     </tr>
+{% endif %}

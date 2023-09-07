@@ -1,0 +1,67 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WCS - {%block title %}GESTION-MAGASIN{%endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+              crossorigin="anonymous">
+        <link href="/static/css/style.css" rel="stylesheet">
+        <script src="https://unpkg.com/htmx.org@1.9.5"
+                integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO"
+                crossorigin="anonymous"></script>
+    </head>
+
+    <body id="{%block bodyid %}genericPage{%endblock %}" hx-boost="true" >
+
+        <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img   width="80px" alt="logo" src="{% static '/img/logo.png' %}" >
+                <a href="https://www.wcsmorocco.com/" >World Class Services</a>
+            </div >
+            <div class="utilisateur">
+                <img    alt="user-image" width="60px" src="{% static '/img/img.png' %} ">
+                <p >Welcome, <b>{{ user }}</b>.</p>
+                    <form action="{% url 'employe_update' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="employe_pk" value="{{ user.id }}">
+                        <button id="profil_update" class="btn btn-link">&nbsp;/&nbsp;Modifier le profil</button>
+                    </form>
+                <a href="{% url 'deconnexion' %}">&nbsp;/&nbsp;Deconnexion</a>
+            </div>
+            <img src="/static/img/menu.png" alt="menu" class="menu">
+        </nav>
+       </header>
+
+        <aside class="bar z-1">
+            <p class="gestion">Gestion-Magasin</p>
+            <ul class="list-group list-group-flush nav-links">
+                <li class="list-group-item"><a href="{% url 'gestion_administrateur' %}">Administrateurs</a></li>
+                <li class="list-group-item"><a href="/">Materiel</a></li>
+                <li class="list-group-item"><a href="{% url 'gestion_utilisation' %}"> Utilisations</a></li>
+                <li class="list-group-item"><a href="{% url 'gestion_commande' %}"> Commandes</a></li>
+                <li class="list-group-item"><a href="{% url 'gestion_reception' %}"> Receptions</a></li>
+                <li class="list-group-item"><a href="{% url 'gestion_employe' %}"> Personnel</a></li>
+                <li class="list-group-item"><a href="{% url 'gestion_client' %}"> Clients</a></li>
+                <li class="list-group-item"><a href="{% url 'gestion_fournisseur' %}"> Fournisseurs</a></li>
+            </ul>
+        </aside>
+
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+
+    <script src="/static/js/js.js"></script>
+
+</html>

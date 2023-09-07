@@ -1,0 +1,66 @@
+<table class="table table-striped table-hover text-center">
+    <thead>
+        <tr>
+            <th scope="col">DATE</th>
+            <th scope="col">MATERIEL</th>
+            <th scope="col">QUANTITE</th>
+            <th scope="col">UTILISATEUR</th>
+            <th scope="col">CLIENT</th>
+            <th scope="col">TYPE</th>
+            <th scope="col">STATUT</th>
+            <th scope="col">ANNULER</th>
+            <th scope="col">SUPPRIMER</th>
+        </tr>
+    </thead>
+    <tbody id="utilisation">
+        {% for utilisation in utilisations %}
+                {% csrf_token %}
+
+                <tr>
+                    <td>{{ utilisation.date }}</td>
+                    <td>{{ utilisation.materiel.id}}&nbsp;{{ utilisation.materiel.nom }}</td>
+                    <td>{{ utilisation.quantite }}</td>
+                    <td>{{ utilisation.employe.nom }}&nbsp;{{ utilisation.employe.prenom }}</td>
+                    <td>{{ utilisation.client.nom }}</td>
+                    <td >
+                        {% if utilisation.type == 'e' %}Emprunt{% endif %}
+                        {% if utilisation.type == 'u' %}Consommation{% endif %}
+                    </td>
+                    <td >
+                        <form >
+                            {% csrf_token %}
+                            <input type="hidden" name="utilisation_pk" value="{{ utilisation.pk }}" >
+                            <label>
+                                <select class="form-select" name="statut" hx-post="{% url 'statut-change' %}" hx-trigger="change" hx-swap="none">
+                                   {% if utilisation.type != 'u' %}
+                                    <option value="r"  {% if utilisation.statut == 'r' %}selected{% endif %}>Remis</option>
+                                   {% endif %}
+                                    <option value="n" {% if utilisation.statut == 'n' %}selected{% endif %}>Non-remis</option>
+                                </select>
+                            </label>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'delete-utilisation' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="materiel_pk" value="{{ utilisation.materiel.pk }}">
+                            <input type="hidden" value="{{ utilisation.pk }}" name="utilisation_pk">
+                            <input type="hidden" value="{{ utilisation.quantite }}" name="quantite">
+                            <button hx-post="{% url 'delete-utilisation' %}" hx-target = "closest tr"
+                                    hx-trigger = "click" hx-swap = "outerHtml" hx-push-url="false"
+                                    hx-confirm="Voulez-vous annulez l'usage?" class="btn btn-primary">X</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'delete-utilisation' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ utilisation.pk }}" name="utilisation_pk">
+                            <button hx-post="{% url 'delete-utilisation' %}" hx-target = "closest tr"
+                                    hx-trigger = "click" hx-swap = "outerHtml" hx-push-url="false"
+                                    hx-confirm="Supprimer l'élément?" class="btn btn-danger">-</button>
+                        </form>
+                    </td>
+                 </tr>
+        {% endfor %}
+        </tbody>
+</table>
