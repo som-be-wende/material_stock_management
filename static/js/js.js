@@ -1,11 +1,13 @@
-const menu = document.querySelector(".menu")
-const bar = document.querySelector(".bar")
+const menu = document.querySelector("#menu");
+const bar = document.querySelector(".bar");
 
 
 
 menu.addEventListener('click',()=>{
         bar.classList.toggle('mobile')
-})
+});
+
+
 
 document.body.addEventListener("htmx:responseError",function(evt){
             alert(evt.detail.xhr.responseText)
@@ -35,5 +37,20 @@ function myFunction() {
     }
 }
 
+function stock_value() {
+  var v_stock = document.getElementById("v_stock"); //on récupère les lignes du tableau
+  var arrayLignes = document.getElementById("tab_mat").rows; //on récupère les lignes du tableau
+  var longueur = arrayLignes.length; //on peut donc appliquer la propriété length
 
+  t = 0;
+  for (var i = 1; i < longueur; i++) {
+    var arrayColonnes = arrayLignes[i].cells; //on récupère les cellules de la ligne
+    var largeur = arrayColonnes.length;
+    arrayColonnes[6].innerHTML =
+      arrayColonnes[5].innerHTML * arrayColonnes[4].innerHTML;
+    t += arrayColonnes[5].innerHTML * arrayColonnes[4].innerHTML;
+  }
+
+  v_stock.innerHTML = t;
+}
 

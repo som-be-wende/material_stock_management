@@ -6,9 +6,6 @@
     list-style: none;
 }
 
-body{
-
-}
 
 /*******************header*******************/
 
@@ -81,7 +78,7 @@ header{
     color: red;
 }
 
-.navbar .menu {
+.navbar #menu {
     position: absolute;
     display: none;
     width: 35px;
@@ -201,6 +198,9 @@ main .sous-titre {
         text-decoration: underline;
 }
 
+tbody{
+    text-align: justify;
+}
 
 
 
@@ -235,7 +235,7 @@ main .sous-titre {
         justify-content: space-around;
     }
 
-    .navbar .menu{
+    .navbar #menu{
         display: block;
         right: 3vh;
         z-index: 2;

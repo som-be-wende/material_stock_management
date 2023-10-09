@@ -3,32 +3,82 @@
 {% block bodyid %}add_reception{% endblock %}
 
 {% block content %}
-<h1 id="entete">RECEPTION</h1>
+<h1 id="entete">RECEPTIONS</h1>
 
-    <form id="update_form" class="d-flex flex-column " action="{% url 'add-reception' %}" method="POST">
+    <form id="update_form" class="d-flex flex-column " action="{% url 'add-panier' %}" method="POST">
         {% csrf_token %}
-            <label class="form-label" for="materiel">MATERIEL:
-                <input class="form-control mb-2" type="hidden" value="{{ materiel.id }}" name="materiel_pk">
-                <input class="form-control mb-2" type="text" id="materiel" value="{{ materiel.id }}" name="materiel_pk" disabled>
-            </label>
-            <label class="form-label" for="date">DATE:
+        <div id="update_form" class="d-flex flex-column " style="width: 50%;">
+            <label class="form-label" for="date">Date:
                 <input class="form-control mb-2" type="date" id="date" name="date" required>
-            </label>
-
-            <label class="form-label" for="quantite">QUANTITE:
-                <input class="form-control mb-2" type="number" min="0" id="quantite" name="quantite" required>
-            </label>
-
-            <label class="form-label" for="fournisseur">FOURNISSEUR:
-                <select class="form-select mb-2" name="fournisseur" id="fournisseur" >
-                    <option value="-1">-------</option>
-                    {% for fournisseur in fournisseurs %}
-                        <option value="{{ fournisseur.pk }}">{{ fournisseur.nom }}</option>
+            </label>           
+            <label class="form-label" for="materiel">Materiel:
+                <select class="form-select" id="materiel" name="materiel_pk" required >
+                    <option value="-1" selected>-------</option>
+                    {% for materiel in materiels %}
+                        <option value="{{ materiel.pk }}"> {{ materiel.nom }}  |  {{ materiel.description }}  |  {{ materiel.id }}</option>
                     {% endfor %}
                 </select>
             </label>
-        <button class="btn btn-success mt-4" type="submit">Enregistrer</button>
 
+
+            <label class="form-label" for="fournisseur">Fournisseur:
+                <select class="form-select mb-2" name="fournisseur" id="fournisseur" >
+                    <option value="-1">-------</option>
+                    {% for fournisseur in fournisseurs %}
+                        <option value="{{ fournisseur.pk }}">{{ fournisseur.nom }}  |  {{ fournisseur.reference }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="form-label" for="quantite">Quantite:
+                <input class="form-control mb-2" type="number" min="0" id="quantite" name="quantite" required>
+            </label>
+            <label class="form-label" for="prix_unitaire">Prix/unité:
+                <input class="form-control mb-2" type="number" min="0" id="prix_unitaire" name="prix_unitaire" value="0" required>
+            </label>
+            <input type=hidden value='reception' name='reception' >
+        <button class="btn btn-success mt-4">Ajouter</button>
+        </div>
+     </form>
+
+     <p class='mt-5'>Panier des réceptions:</p>
+
+        <table class="table table-striped table-hover mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Materiel</th>
+                    <th scope="col">Fournisseur</th>
+                    <th scope="col" class='text-center' >Quantite</th>
+                    <th scope="col" class='text-center' >Prix/unite</th>
+                    <th scope="col" class='choix text-center'>Supprimer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for panier in paniers %}
+                        {% csrf_token %}
+
+                        <tr>
+                            <td>{{ panier.date }}</td>
+                            <td>{{ panier.materiel.nom }}  |  {{ panier.materiel.description }}  |  {{ panier.materiel.id }}</td>
+                            <td>{{ panier.fournisseur.nom}}  |  {{ panier.fournisseur.reference}}</td>
+                            <td class='text-center'>{{ panier.quantite }}</td>
+                            <td class='text-center'>{{ panier.prix_unitaire }}</td>
+                            <td class=' choix text-center'>
+                                <form action="{% url 'delete-panier' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ panier.pk }}" name="panier_pk">
+                                    <button hx-post="{% url 'delete-panier' %}" hx-target = "closest tr"
+                                            hx-trigger = "click" hx-swap = "outerHtml" hx-push-url="false"
+                                            hx-confirm="Supprimer l'élément?" class="btn btn-danger">-</button>
+                                </form>
+                            </td>
+                        </tr>
+                {% endfor %}
+                </tbody>
+        </table>
+    <form class='mt-2' action={% url 'add-reception'%} method='POST'>
+        {% csrf_token %}
+        <input type='hidden' value='v_reception' name='v_reception'> 
+        <button class='btn btn-success'>Valider-Receptions</button>
     </form>
-
 {% endblock %}

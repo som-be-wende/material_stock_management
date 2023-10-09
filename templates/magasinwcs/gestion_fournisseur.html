@@ -8,15 +8,18 @@
     <fieldset >Ajouter un fournisseur:</fieldset>
         {% csrf_token %}
         <label class="mx-4">
+            <input class="form-control mx-4" type="text" name="ref" placeholder="Id..." required>
+        </label>            
+        <label class="mx-4">
             <input class="form-control mx-4" type="text" name="nom" placeholder="Nom...">
         </label>
         <label class="mx-4">
             <input type="text" class="form-control" name="contact" placeholder="Conctact...">
         </label>
-        <button hx-post="{% url 'add-fournisseur' %}"  hx-push-url="false" hx-target="#fournisseurplus" hx-swap="afterbegin" class="btn btn-success" type="submit">Ajouter</button>
+        <button class="btn btn-success" type="submit">Ajouter</button>
     </form>
 
-    <p>Liste des fournisseurs:</p>
+    <p>Liste des fournisseurs: <span>{% for fournisseur in fournisseurs %} {% if forloop.last %} {{forloop.counter}} &nbsp;Eléments {% endif %} {% endfor %} </span></span></p>
     <div id="fournisseurs">
         {% include 'magasinwcs/liste_fournisseur.html' with fournisseurs=fournisseurs %}
     </div>

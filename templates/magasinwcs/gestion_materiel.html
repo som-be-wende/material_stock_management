@@ -8,23 +8,27 @@
 
     <!-- Categorie -->
 
-    <div class="row mb-5">
-        <div class="col-4">
-            <div id="categories" class="list-group flex-column">
-                <p class="sous-titre">CATEGORIES:</p>
+    <div class="row mb-1" style="height: 50%;" >
+        <div class="col-4"  style="height: 75%;">
+            <p class="sous-titre">CATEGORIES:</p>
+            <div id="categories" class="list-group flex-column overflow-auto" style="height:100%;">
+                
                 {% for categorie in categories %}
-                    {% include "magasinwcs/categorie.html" with categorie=categorie %}
+                    <form class="list-group" method="POST"  action="{% url 'gestion_materiel' %}">
+                        {% csrf_token %}
+                        <input type='hidden' value="{{ categorie.pk }}" name="categorie">
+                        <button class="list-group-item {% if categorie.pk == glob.pk %}active{% endif %} text-start z-0">{{ categorie.nom }}</button>
+                    </form>
                 {% endfor %}
             </div>
 
 
-            <form method="POST" action="add-categorie/" class="d-flex gap-3 mt-3 mb-3">
+            <form method="POST" action="{% url 'add-categorie' %}" class="d-flex gap-3 mt-3 mb-3">
                 {% csrf_token %}
                 <label>
                     <input type="text"  class="form-control" name="categorie-nom" placeholder="Categorie..." required="required">
                 </label>
-                <button type="submit" hx-post = "add-categorie/" HX-Refresh = "true" class="btn btn-success" hx-push-url="false"
-                        hx-target = "#categories" hx-trigger = "click" hx-swap = "beforeend">Ajouter</button>
+                <button class="btn btn-success" >Ajouter</button>
             </form>
         </div>
 
@@ -32,11 +36,21 @@
 
         <!-- Materiel -->
 
-        <div class="col ms-5 ps-5 border-start">
+        <div class="col ms-5 ps-5 border-start" style="height: 100%;">
             <p class="sous-titre text-center ">Ajouter du materiel</p>
-            <form method="POST" class="d-flex flex-column text-end ">
+            <form  style="height: 50%;" method="POST"  action ="{% url 'add-materiel' %}" class="d-flex flex-column text-end ">
                 {% csrf_token %}
-                 <label>
+                <label>
+                    <select class="form-select mb-2" name="categorie" id="categorie" required>
+                        <option value=""  hidden>Categorie...</option>
+                        {% for categorie in categories %}
+                            {% if categorie.nom != '.Global' %}
+                            <option value="{{ categorie.pk }}">{{ categorie.nom }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </label>                
+                <label>
                     <input type="text" class="form-control mt-3" name="materiel-id" placeholder="Id...">
                 </label>
                 <label>
@@ -45,26 +59,41 @@
                  <label>
                      <textarea class="form-control mt-3" name="materiel-description" placeholder="Description..."></textarea>
                 </label>
-                    <input type="hidden" id="add_m" name="categorie_pk" value="{{ glob.pk }}">
+                    
+                <label class="form-label" for="prix_unitaire">
+                    <input class="form-control mt-3" type="number" min="0" id="prix_unitaire" name="prix_unitaire" value="" placeholder='Prix/unité...' required>
+                </label>
+                
+                <input type="hidden" id="add_m" name="categorie_pk" value="{{ glob.pk }}">
 
-                <button type="submit" hx-post = "add-materiel/" class="btn btn-success mt-3 " hx-push-url="false"
-                        hx-target = "#materielplus" hx-trigger = "click" hx-swap = "afterbegin">Ajouter</button>
+                <button type="submit" class="btn btn-success mt-3 ">Ajouter</button>
 
             </form>
         </div>
     </div>
 
 
-    <p>Liste du materiel:</p>
+    <form action="{% url 'delete-categorie' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" id="del_cat" name="categorie_pk" value="{{ glob.pk }}">
+        <button type='submit' hx-post = "{% url 'delete-categorie' %}" hx-target = "closest body" hx-trigger = "click" 
+                         hx-swap = "outerHtml" hx-push-url="false" hx-confirm="Supprimer l'élément?" class="btn btn-danger mt-3" value='Supprimer-Catégorie'>Supprimer-Catégorie</button>
+    </form>
+
+    <div class="d-flex justify-content-between mt-5"><span>Liste du materiel:<span>{% for materiel in materiels %} {% if forloop.last %} {{forloop.counter}} &nbsp;Eléments {% endif %} {% endfor %} </span></span> 
+     <span style="color: #dc3545;" class='mb-3'><b>Montant total du stock:&nbsp;<span id='v_stock'></span>&nbsp; Dhs</b></span> </div>
     <div id="materiels">
           {% include "magasinwcs/liste_materiel.html" with materiels=materiels %}
     </div>
 
 
-    <form onsubmit="confirm('Supprimer la catégorie?')" action="delete-categorie/" method="POST">
-    {% csrf_token %}
-    <input type="hidden" id="del_cat" name="categorie_pk" value="{{ glob.pk }}">
-        <button  class="btn btn-danger mt-3" >Supprimer-Catégorie</button>
-    </form>
-
+    
+    <script>
+        setTimeout("stock_value()",10);
+    </script>
+    {% if mat %}
+        <script>
+            alert('Materiel ajouté');
+        </script>
+    {% endif %}
 {% endblock %}

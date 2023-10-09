@@ -33,7 +33,19 @@
                 {% endfor %}
             </select>
         </label>
+
+        <label class="form-label ms-4" for="datechoix">Date &nbsp;
+            <input type='date' id="datechoix" class="form-select" name="date" hx-post="{% url 'get-utilisation' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#utilisations">
+        </label>
     </form>
+
+        <div class='mt-3 mb-3'>
+            <form action="{% url 'add-utilisation' %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-primary">Ajouter - Utilisations</button>
+            </form>
+        </div>
 
     <div id="utilisations">
         {% include 'magasinwcs/liste_utilisation.html' with utilisations=utilisations %}

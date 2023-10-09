@@ -10,6 +10,7 @@
   - nom
   - description
   - quantite
+  - prix_unitaire
   - categorie
 
 - Fonction
@@ -45,17 +46,32 @@
   - date
   - materiel
   - quantite
+  - prix_unitaire
   - fournisseur
 
 - Fournisseur
   - nom
   - contact
 
+- Panier
+  - date
+  - employe
+  - materiel
+  - quantite
+  - prix_unitaire
+  - client
+  - utilisateur
+  - utilisation
+  - fournisseur
+  - type
+
+
 - Reception 
   - id
   - date
   - materiel
   - quantite
+  - prix_unitaire
   - fournisseur
 
 ## Fonctionnalités

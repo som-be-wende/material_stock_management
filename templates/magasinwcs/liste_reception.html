@@ -1,13 +1,14 @@
-<table class="table table-striped table-hover text-center">
+<table class="table table-striped table-hover ">
     <thead>
         <tr>
             <th scope="col">Date</th>
             <th scope="col">Id</th>
             <th scope="col">Materiel</th>
-            <th scope="col">Quantite</th>
             <th scope="col">Fournisseur</th>
-            <th scope="col">ANNULER</th>
-            <th scope="col">SUPPRIMER</th>
+            <th scope="col" class='text-center'>Quantite</th>
+            <th scope="col" class='text-center'>Prix/unite</th>
+            <th scope="col" class='choix text-center'>Annuler</th>
+            <th scope="col" class='choix text-center'>Supprimer</th>
         </tr>
     </thead>
     <tbody id="reception">
@@ -17,10 +18,11 @@
                 <tr>
                     <td>{{ reception.date }}</td>
                     <td>{{ reception.id }}</td>
-                    <td>{{ reception.materiel.id}}&nbsp;{{ reception.materiel.nom }}</td>
-                    <td>{{ reception.quantite }}</td>
-                    <td>{{ reception.fournisseur.nom }}</td>
-                    <td>
+                    <td>{{ reception.materiel.nom }}  |  {{ reception.materiel.description }}  |  {{ reception.materiel.id }}</td>
+                    <td>{{ reception.fournisseur.nom }}  |  {{ reception.fournisseur.reference }}</td>
+                    <td class='text-center'>{{ reception.quantite }}</td>
+                    <td class='text-center'>{{ reception.prix_unitaire }}</td>
+                    <td class='text-center'>
                         <form action="{% url 'delete-reception' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="materiel_pk" value="{{ reception.materiel.pk }}">
@@ -31,7 +33,7 @@
                                     hx-confirm="Voulez-vous annulez la reception?" class="btn btn-primary">X</button>
                         </form>
                     </td>
-                    <td>
+                    <td class='text-center'>
                         <form action="{% url 'delete-reception' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" value="{{ reception.pk }}" name="reception_pk">

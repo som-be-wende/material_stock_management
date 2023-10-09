@@ -5,12 +5,16 @@
 {% block content %}
 
     <h1 id="entete">MODIFICATION DU CLIENT</h1>
-        <form id="update_form" class="d-flex flex-column " method="GET" action="{% url 'client_update' %}">
+        <form id="update_form" class="d-flex flex-column " method="POST" action="{% url 'client_update' %}">
+            {% csrf_token %}
             <label>
                 <input type="hidden" value="{{ client.pk }}" name="client_pk">
             </label>
+            <label class="form-label" for="ref">ID:
+                <input class="form-control mb-2" type="text" id="ref" value="{{ client.reference }}" name="ref" required>
+            </label>  
             <label class="form-label" for="nom">NOM:
-                <input class="form-control mb-2" type="text" id="nom" value="{{ client.nom }}" name="nom">
+                <input class="form-control mb-2" type="text" id="nom" value="{{ client.nom }}" name="nom" required>
             </label>
 
             <label class="form-label" for="contact">CONTACT:

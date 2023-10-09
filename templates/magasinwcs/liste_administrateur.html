@@ -1,13 +1,13 @@
 {% if not administrateurplus %}
-    <table class="table table-striped table-hover text-center">
+    <table class="table table-striped table-hover ">
     <thead>
         <tr>
             <th scope="col">ID</th>
             <th scope="col">NOM</th>
             <th scope="col">Prenom</th>
             <th scope="col">Fonction</th>
-            <th scope="col">Admin</th>
-            <th scope="col">SUPPRIMER</th>
+            <th scope="col" class='text-center'>Admin</th>
+            <th scope="col" class='choix text-center'>SUPPRIMER</th>
         </tr>
     </thead>
     <tbody id="administrateurplus">
@@ -19,7 +19,7 @@
                     <td>{{ administrateur.employe.nom }}</td>
                     <td>{{ administrateur.employe.prenom }}</td>
                     <td>{{ administrateur.employe.fonction.nom }}</td>
-                    <td>
+                    <td class='text-center'>
                         <form action="{% url 'type-change' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" value="{{ administrateur.pk }}" name="administrateur_pk">
@@ -36,7 +36,7 @@
                         </form>
 
                     </td>
-                    <td>
+                    <td  class='text-center' >
                         <form action="{% url 'delete-administrateur' %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="administrateur_pk" value="{{ administrateur.pk }}">
@@ -56,7 +56,7 @@
         <td>{{ administrateurplus.employe.nom }}</td>
         <td>{{ administrateurplus.employe.prenom }}</td>
         <td>{{ administrateurplus.employe.fonction.nom }}</td>
-        <td>
+        <td class='text-center'>
             <form action="{% url 'type-change' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" value="{{ administrateurplus.pk }}" name="administrateur_pk">
@@ -72,7 +72,7 @@
                 </label>
             </form>
         </td>
-        <td>
+        <td class='text-center'>
             <form action="{% url 'delete-administrateur' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="administrateur_pk" value="{{ administrateurplus.pk }}">

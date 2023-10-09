@@ -13,11 +13,11 @@
                     hx-trigger="change" hx-swap="innerHTML" hx-target="#receptions">
                 <option value="g" selected>Tous</option>
                 {% for materiel in materiels %}
-                    <option value="{{ materiel.pk }}">{{ materiel.id }}&nbsp;{{ materiel.nom }}</option>
+                    <option value="{{ materiel.pk }}"> {{ materiel.nom }} | {{ materiel.description }} | {{ materiel.id }}</option>
                 {% endfor %}
             </select>
         </label>
-        <label class="form-label ms-4" for="fournisseurchoix">fournisseur &nbsp;
+        <label class="form-label ms-4" for="fournisseurchoix">Fournisseur &nbsp;
             <select id="fournisseurchoix" class="form-select" name="fournisseur" hx-post="{% url 'get-reception' %}"
                     hx-trigger="change" hx-swap="innerHTML" hx-target="#receptions">
                 <option value="g" selected>Tous</option>
@@ -26,7 +26,19 @@
                 {% endfor %}
             </select>
         </label>
+        <label class="form-label ms-4" for="datechoix">Date &nbsp;
+            <input type='date' id="datechoix" class="form-select" name="date" hx-post="{% url 'get-reception' %}"
+                    hx-trigger="change" hx-swap="innerHTML" hx-target="#receptions">
+        </label>
+
     </form>
+
+    <div class='mt-3 mb-3'>
+        <form action="{% url 'add-reception' %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-primary">Ajouter - Receptions</button>
+        </form>
+    </div>
 
     <div id="receptions">
         {% include 'magasinwcs/liste_reception.html' with receptions=receptions %}

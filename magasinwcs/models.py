@@ -8,7 +8,7 @@ class Categorie(models.Model):
 
     @classmethod
     def get_default_categorie(cls) -> "Categorie":
-        categorie, _ = cls.objects.get_or_create(nom="Global")
+        categorie, _ = cls.objects.get_or_create(nom=".Global")
         return categorie
 
     def __unicode__(self):
@@ -23,6 +23,7 @@ class Materiel(models.Model):
     nom = models.CharField(max_length=40)
     description = models.CharField(max_length=200, blank=True)
     quantite = models.IntegerField(default=0)
+    prix_unitaire = models.IntegerField(default=0)
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
 
     @classmethod
@@ -38,7 +39,7 @@ class Fonction(models.Model):
 
     @classmethod
     def get_default_fonction(cls) -> "Fonction":
-        fonction, _ = cls.objects.get_or_create(nom="Global")
+        fonction, _ = cls.objects.get_or_create(nom=".Global")
         return fonction
 
     def __unicode__(self):
@@ -77,6 +78,7 @@ class Administrateur(models.Model):
 
 
 class Client(models.Model):
+    reference = models.CharField(max_length=50, unique=True, blank=True, null=True)
     nom = models.CharField(max_length=60)
     contact = models.CharField(max_length=60, blank=True)
 
@@ -93,7 +95,7 @@ class Utilisation(models.Model):
     materiel = models.ForeignKey(Materiel, on_delete=models.CASCADE)
     quantite = models.IntegerField(default=0)
     employe = models.ForeignKey(Employe, on_delete=models.CASCADE)
-    client = models.ForeignKey(Client, models.SET_NULL, blank=True, null=True, )
+    client = models.ForeignKey(Client, models.SET_NULL, blank=True, null=True)
     type = models.CharField(max_length=1, choices=[("u", "utilisation"), ("e", "emprunt")], default="e")
     statut = models.CharField(max_length=1, choices=[("r", "remis"), ("n", "non-remis")], default="n")
 
@@ -106,6 +108,7 @@ class Utilisation(models.Model):
 
 
 class Fournisseur(models.Model):
+    reference = models.CharField(max_length=50, unique=True, blank=True, null=True)
     nom = models.CharField(max_length=60)
     contact = models.CharField(max_length=60)
 
@@ -136,6 +139,7 @@ class Reception(models.Model):
     date = models.DateField(null=True, blank=True)
     materiel = models.ForeignKey(Materiel, on_delete=models.CASCADE)
     quantite = models.IntegerField(default=0)
+    prix_unitaire = models.IntegerField(default=0)
     fournisseur = models.ForeignKey(Fournisseur, models.SET_NULL, blank=True, null=True)
 
     @classmethod
@@ -144,3 +148,16 @@ class Reception(models.Model):
 
     def __str__(self):
         return str(self.date) + ' ' + self.materiel.nom
+
+
+class Panier(models.Model):
+    date = models.DateField(null=True, blank=True)
+    employe = models.ForeignKey(Employe, on_delete=models.CASCADE, related_name='employe')
+    materiel = models.ForeignKey(Materiel, on_delete=models.CASCADE)
+    quantite = models.IntegerField(default=0)
+    prix_unitaire = models.IntegerField(default=0)
+    type = models.CharField(max_length=20, blank=True)
+    utilisateur = models.ForeignKey(Employe, on_delete=models.CASCADE,blank=True,related_name='utilisateur', null=True)
+    client = models.ForeignKey(Client, models.SET_NULL, blank=True, null=True)
+    utilisation = models.CharField(max_length=1, choices=[("u", "utilisation"), ("e", "emprunt")], default="e", blank=True)
+    fournisseur = models.ForeignKey(Fournisseur, on_delete=models.CASCADE, blank=True, null=True)
