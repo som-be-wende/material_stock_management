@@ -20,9 +20,9 @@ from magasinwcs.models import *
 
 
 def send_mail(body):
-    SENDER_EMAIL = 'magasinwcs@gmail.com'
-    MAIL_PASSWORD = 'vcngzmmmwmqgfpqw'
-    RECEIVER_EMAIL = 'albanzoungrana@gmail.com'
+    SENDER_EMAIL = '******@gmail.com'
+    MAIL_PASSWORD = '******'
+    RECEIVER_EMAIL = '******@gmail.com'
 
     message = MIMEMultipart()
     message['Subject'] = 'Nouvelle Commande'
